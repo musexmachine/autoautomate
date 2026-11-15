@@ -1,0 +1,31 @@
+# autoautomate — brainstorm decisions (Dani, 2026-11-14)
+- Name: autoautomate. Go program; macOS, Windows, Linux in v1.
+- Audience order: Dani first -> students (AI-augmented workflows course) -> real product.
+- AI: local by default (Ollama), opt-in cloud model with preview of exactly what gets sent.
+- Ranking: time spent + confidence score (research Jev/TypeSafe Confidence Score fit); user labels each "candidate for automation" / "keep human" per brainstorm-page rules; end with a product-idea ranking skill producing ranked list + reasons.
+- Sources (all requested; off until enabled; metadata before content):
+  core wave 1: app/window usage, browser history, clipboard history
+  later waves: Screen Time, Reminders, Calendar; Messages + Mail metadata only; Notes, Shortcuts, recent files; shell history; window/tab switching + Downloads; repeated typed phrases (patterns only) + repeated searches; Slack/Teams/Discord metadata; code editor + git history; iPhone Screen Time, Focus, Siri, Wallet.
+- Settings panel required: a tab to toggle each source on/off; shows SQLite DB location; data stored locally only.
+- Privacy: nothing leaves the machine without the user knowing.
+- Handoff: final Cursor prompt.
+- UI: menu bar/tray app + local web UI (dashboard + settings) bound to localhost.
+- Handoff prompt must list ALL sources in best implementation order (core 3 first, then waves).
+- Retention: raw events 30 days; pattern summaries kept until user deletes them.
+- Settings: "Start at login" toggle (per-OS: macOS LaunchAgent/SMAppService, Windows Run key/Startup, Linux XDG autostart).
+- Output: weekly digest notification + always-available dashboard.
+- Prompt includes a "Choose the model" section (see model-section.md).
+- Digests: daily + weekly digest notifications, plus always-available live dashboard.
+- Prompt must instruct Cursor to first find skills/libraries for live dashboards in Go (e.g. via skills search, trackawesomelist awesome-go) and pick one with reasons.
+- Prompt includes a "Choose the model" section (see model-section.md).
+- Confidence: Jev verdict adopt-with-changes 0.80; local heuristic default, TypeSafe opt-in on redacted summaries (cloud opt-in already approved by Dani).
+- 2026-11-14 10:17 PM ET (Dani): LOCAL ONLY, period. No cloud model and no cloud calls, even opt-in. This replaces "cloud opt-in with preview". TypeSafe dropped; Jev's rubric runs on a local model.
+- 2026-11-14 10:17 PM ET (Dani): add an anonymized summary share link. Only the user can create one, and they see a preview first. It must render perfectly on mobile and look great on the desktop web too. (Delivery method still open.)
+- 2026-11-14 10:17 PM ET (Dani): share-link delivery is one-click publish to a host the user connects (for example GitHub Gist or Cloudflare Pages). It is the single exception to local only. Rules: off until a host is connected; only the anonymized summary is published, after the user previews it; the app never sends raw events; the user can unpublish or delete the link; the page is a responsive static page that's perfect on mobile and looks great on the desktop web.
+- 2026-11-14 10:22 PM ET (Dani): project renamed autoautomate.
+- 2026-11-14 10:24 PM ET (Dani): project renamed autoautomate (replaces automateme).
+- 2026-11-14 10:26 PM ET (Dani): she has an Apple Developer ID. Distribution plan: signed + notarized direct download (site/GitHub Releases/Homebrew), not the Mac App Store (the sandbox blocks Accessibility and Full Disk Access). Build language still open (Swift starred).
+- 2026-11-14 10:30 PM ET: Apple check verified (apple-distribution-check.md): no Mac App Store for the full watcher (sandbox forbids Accessibility; no public API for Screen Time, browser history, Messages or Mail). Ship Developer ID + notarized direct download. Onboarding must walk users through Accessibility, Full Disk Access and Input Monitoring in System Settings; needs a privacy policy, consent and a visible recording indicator.
+- 2026-11-14 10:45 PM ET (Dani): architecture = Store Lite Swift menu bar app (fully useful with sandbox-safe public APIs: NSWorkspace frontmost app, EventKit, notifications, SMAppService) + optional Go Helper service offered on her website (notarized, LaunchAgent, reads advanced sources with FDA/Accessibility). Store app shows an always-visible 'Advanced sources' section that unlocks only when the Helper is installed; disclosed in the description and review notes. Verify 4.2.3 and 2.5.2 before submitting.
+- 2026-11-14 10:45 PM ET (Dani confirmed): the 'Advanced sources' section is ALWAYS visible in the Store Lite Settings. Without the Helper it shows 'Requires the free autoautomate Helper' plus a download link and disabled toggles; with the Helper installed and running, the toggles turn on. The same disclosure goes in the App Store description and the review notes. Never hide the section.
+- 2026-11-14 10:46 PM ET (Dani): ONE settings UI. Helper sources appear in the same Sources tab, in the same toggle style, as the Lite sources. The tray app is the only UI: it sends on/off and settings changes to the Helper over the local connection, and the Helper reports each source's status back (needs permission, on, off). The Helper has no separate settings window.
